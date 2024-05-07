@@ -1,5 +1,5 @@
 'use server';
-import { LoginSchema } from "@/schema";
+import { LoginSchema, RegisterSchema } from "@/schema";
 import { z } from "zod";
 
  
