@@ -19,16 +19,20 @@ import { Button } from '../ui/button';
 import { useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { Home, Register } from '@/lib/routes';
-import Link from 'next/link';
+import { useTransition } from 'react';
 import FormError from '../form-error';
 import FormSuccess from '../form-success';
-//import { authenticate } from '@/app/lib/actions';
+import { login } from '@/actions/login';
 
 const LoginForm = () => {
   //const [errorMessage, dispath] = useFormState(authenticate, undefined);
-  const [loading, setLoading] = useState(false);
-  const { pending } = useFormStatus();
-
+  //const [loading, setLoading] = useState(false);
+  //const { pending } = useFormStatus();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+  //start transition is useful if we use revalidatePath, revalidateTag 
+  //or other cache functions on server action 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -37,11 +41,29 @@ const LoginForm = () => {
     }
   })
 
+  // const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+  //   console.log("in on submit const");
+  //   console.log(data);
+  //   login(data);
+  // }
 
-
-  async function onSubmit(data: z.infer<typeof LoginSchema>){
-    setLoading(true);
-    console.log(data);
+  function onSubmit(formData: z.infer<typeof LoginSchema>){
+    //setLoading(true);
+    setError("");
+    setSuccess("");//clear on every new submit 
+    //actions are essentialy functions with the 'use server' tag
+    startTransition(() => {
+      login(formData)
+        .then((validatedFields) => {
+          setError(validatedFields.error);
+          setSuccess(validatedFields.success);
+          //error on validatedFields.error and validatedFields.success 
+          //Argument of type 'string | undefined' is not assignable to parameter of type 'SetStateAction<string>'.
+          //fix: give a type to useState() -> useState<>();
+        })
+    })
+    //console.log(data);
+    
     //setLoading(false); after backend logic 
   }
   //onSubmit={form.handleSubmit(onSubmit)}
@@ -62,7 +84,7 @@ const LoginForm = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     {/* NOTE: controlled component - spread field to give input controls that match the form */}
-                    <Input {...field} type="email" placeholder='name@yourdomain.com'/>
+                    <Input {...field} disabled={isPending} type="email" placeholder='name@yourdomain.com'/>
                   </FormControl>
                   <FormMessage/>
                 </FormItem>
@@ -76,16 +98,16 @@ const LoginForm = () => {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     {/* NOTE: controlled component - spread field to give input controls that match the form */}
-                    <Input {...field} type="password" placeholder='******'/>
+                    <Input {...field} disabled={isPending} type="password" placeholder='******'/>
                   </FormControl>
                   <FormMessage/>
                 </FormItem>
               )}
             />
           </div>
-          <FormError message=""/>
-          <FormSuccess message=""/>
-          <Button type='submit' className='w-full'>
+          <FormError message={error}/>
+          <FormSuccess message={success}/>
+          <Button type='submit' className='w-full' disabled={isPending}>
             Login
           </Button>
         </form>
