@@ -18,7 +18,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
-//import { Register, Home } from '@/app/lib/routes';
+import { Home, Register } from '@/lib/routes';
 import Link from 'next/link';
 //import { authenticate } from '@/app/lib/actions';
 
@@ -49,43 +49,9 @@ const LoginForm = () => {
                  backButtonHref={Register.href}
                  backButtonLabel="Don't have an account? Register here."
     >
-      <Form {...form}>
-        <form action={dispath} className='space-y-6'>
-          <div className='space-y-4'>
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Email
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} type='email' placeholder='name@yourdomain.com'/>
-                  </FormControl>
-                  <FormMessage/>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='password'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Password
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} type='password' placeholder='***'/>
-                  </FormControl>
-                  <FormMessage/>
-                </FormItem>
-              )}
-            />
-          </div>
-          <LoginButton/>
-        </form>
-      </Form>
+      <div>
+        Card Wrapper
+      </div>
     </CardWrapper>
   )
 }
