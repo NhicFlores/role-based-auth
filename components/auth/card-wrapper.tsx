@@ -6,13 +6,14 @@ import {
    } from "../ui/card"
   import AuthHeader from "./auth-header"
   import AuthLink from "./auth-link"
+import Social from "./social"
 
   interface CardWrapperProps {
     header: string,
-    label: string,
     backButtonHref: string,
     backButtonLabel: string,
     children: React.ReactNode,
+    showSocial?: boolean
   }
   //NOTE TODO NEXT: create auth header component for conditional styling 
   //create back button 
@@ -22,22 +23,26 @@ import {
   // can be extracted into their own component : ex. AuthHeader 
   const CardWrapper = ({
     header,
-    label,
     backButtonHref,
     backButtonLabel,
     children,
+    showSocial,
   }: CardWrapperProps) => {
     return (
-      <Card className="xl:w-1/4 md:w-1/2 shadow-md">
+      <Card className="w-[400px] shadow-md">
         <CardHeader>
-          <AuthHeader header={header} label={label}/>
+          <AuthHeader label={header}/>
         </CardHeader>
         <CardContent>
           {children}
         </CardContent>
-        <CardFooter>
-          <AuthLink label={backButtonLabel} href={backButtonHref}/>
-        </CardFooter>
+        {showSocial && (
+          <CardFooter className="flex-col">
+            <Social/>
+            <AuthLink label={backButtonLabel} href={backButtonHref}/>
+          </CardFooter>
+        )}
+
       </Card>
     )
   }

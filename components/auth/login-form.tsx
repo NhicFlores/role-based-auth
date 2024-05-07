@@ -44,13 +44,13 @@ const LoginForm = () => {
   }
   //onSubmit={form.handleSubmit(onSubmit)}
   return (
-    <CardWrapper header='Login' 
-                 label='Sign in to you account' 
+    <CardWrapper header='Welcome back' 
                  backButtonHref={Register.href}
-                 backButtonLabel="Don't have an account? Register here."
+                 backButtonLabel="Don't have an account?"
+                 showSocial={true}
     >
       <div>
-        Card Wrapper
+        Login form
       </div>
     </CardWrapper>
   )
@@ -66,4 +66,4 @@ function LoginButton() {
   );
 }
 
-export default LoginForm
+export default LoginForm; //don't need this when it is just a component 

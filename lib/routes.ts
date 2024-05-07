@@ -1,6 +1,6 @@
 export const Home =
 {
-  label: "Glass Ordering",
+  label: "Auth Landing Page",
   href: "/",
 };
 
