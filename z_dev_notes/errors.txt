@@ -1,0 +1,12 @@
+05-08-24
+ts error 
+No overload matches this call.
+  Overload 1 of 4, '(args_0: GetServerSidePropsContext): Promise<Session | null>', gave the following error.
+    Argument of type '(req: NextAuthRequest) => Response | null | undefined' is not assignable to parameter of type 'GetServerSidePropsContext'.
+  Overload 2 of 4, '(args_0: (req: NextAuthRequest, ctx: AppRouteHandlerFnContext) => void | Response | Promise<void | Response>): AppRouteHandlerFn', gave the following error.
+    Argument of type '(req: NextAuthRequest) => Response | null | undefined' is not assignable to parameter of type '(req: NextAuthRequest, ctx: AppRouteHandlerFnContext) => void | Response | Promise<void | Response>'.
+      Type 'Response | null | undefined' is not assignable to type 'void | Response | Promise<void | Response>'.
+        Type 'null' is not assignable to type 'void | Response | Promise<void | Response>'.ts(2769)
+
+the issue was caused by a type uppdate in nextAuth. I was returning null 
+and changed it to just return; 
