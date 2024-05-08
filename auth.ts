@@ -1,10 +1,25 @@
 import NextAuth from "next-auth"
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+//import { PrismaClient } from "@prisma/client"
+import { db } from "@/lib/db"
+import authConfig from "@/auth.config"
  
-export const { auth, handlers, signIn, signOut } = NextAuth({
-  providers: [GitHub, Google],
+//const prisma = new PrismaClient()
+ 
+export const { handlers, auth } = NextAuth({
+  adapter: PrismaAdapter(db),
+  session: { strategy: "jwt" },
+  ...authConfig,
 })
+
+//--------- deptracated 
+// import NextAuth from "next-auth"
+// import GitHub from "next-auth/providers/github"
+// import Google from "next-auth/providers/google"
+ 
+// export const { auth, handlers, signIn, signOut } = NextAuth({
+//   providers: [GitHub, Google],
+// })
 
 // In production, AUTH_SECRET is a required environment variable 
 // - if not set, NextAuth.js will throw an error. See MissingSecretError for more details.
