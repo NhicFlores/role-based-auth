@@ -1,19 +1,47 @@
+'use server'
 //due to prisma's incompatability with edge, this is the file 
 //that triggers the nextjs middleware 
 //while auth.ts uses prisma adapter 
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
-
+//import GitHub from "next-auth/providers/github"
+//import Google from "next-auth/providers/google"
+import Credentials from "next-auth/providers/credentials"
 import type { NextAuthConfig } from "next-auth"
-
+import { LoginSchema } from "./schema"
+import { getUserByEmail } from "./data/user";
+import { User } from "@prisma/client";
+import bcrypt from "bcrypt";
 // -Create an auth.config.ts file which exports an object containing 
 // your Auth.js configuration options. You can put all common configuration 
 // here which does not rely on the adapter. 
 // -Notice this is exporting a configuration object only, 
 // we’re not calling NextAuth() here.
 
+// we have to enforce login schema here as well because some 
+// users will know how to bypass our login screen and send 
+// inputs directly 
 export default { 
-    providers: [GitHub, Google], 
+    providers: [
+        Credentials({
+            async authorize(credentials) {
+                const validatedFields = LoginSchema.safeParse(credentials);
+                if (validatedFields.success) {
+                    const { email, password } = validatedFields.data;
+                    const user = await getUserByEmail(email);
+
+                    if(!user || !user.password) return;
+
+                    const paswordsMatch = await bcrypt.compare(
+                        password,
+                        user.password,
+                    );
+
+                    if (paswordsMatch) return user;
+                }
+
+                return null;
+            }
+        })
+    ], 
 } satisfies NextAuthConfig
 
 
