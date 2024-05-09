@@ -1,13 +1,13 @@
 import { db } from "@/lib/db";
-import { User } from "@prisma/client";
 
-export const getUserByEmail = async (email: string) => {
+export async function getUserByEmail(email: string){
     try {
         const user = await db.user.findUnique({
             where: {
                 email
             }
         });
+        const pass = user?.password;
         return user;
     } catch (error) {
         return {error: "email already in use"}
