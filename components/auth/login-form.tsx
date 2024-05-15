@@ -54,13 +54,12 @@ const LoginForm = () => {
     //actions are essentialy functions with the 'use server' tag
     startTransition(() => {
       login(formData)
-        .then((validatedFields) => {
-          setError(validatedFields.error);
-          setSuccess(validatedFields.success);
-          //error on validatedFields.error and validatedFields.success 
-          //Argument of type 'string | undefined' is not assignable to parameter of type 'SetStateAction<string>'.
-          //fix: give a type to useState() -> useState<>();
-        })
+        // .then((validatedFields) => {
+        //   setError(validatedFields.error);
+        //   //error on validatedFields.error and validatedFields.success 
+        //   //Argument of type 'string | undefined' is not assignable to parameter of type 'SetStateAction<string>'.
+        //   //fix: give a type to useState() -> useState<>();
+        // })
     })
     //console.log(data);
     

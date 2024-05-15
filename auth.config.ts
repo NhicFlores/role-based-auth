@@ -26,7 +26,7 @@ export default {
                 const validatedFields = LoginSchema.safeParse(credentials);
                 if (validatedFields.success) {
                     const { email, password } = validatedFields.data;
-                    const user = await getUserByEmail(email);
+                    const user: User = await getUserByEmail(email);
 
                     if(!user || !user.password) return;
 
@@ -38,7 +38,7 @@ export default {
                     if (paswordsMatch) return user;
                 }
 
-                return null;
+                return;
             }
         })
     ], 
